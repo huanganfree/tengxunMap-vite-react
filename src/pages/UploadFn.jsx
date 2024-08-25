@@ -1,6 +1,7 @@
 import { AutoComplete, Button, Input, Select } from 'antd';
 import { useEffect, useRef, useState } from 'react';
-import fetchJSONP from 'fetch-jsonp'
+import fetchJSONP from 'fetch-jsonp';
+import classes, { searchResult, btn, antInput } from './css/UploadFn.module.less';
 
 export default function UploadFn() {
 
@@ -42,6 +43,7 @@ export default function UploadFn() {
 
     async function getPanelValue(e) {
         setValue(e.target.value)
+        setOptions([])
     }
 
     useEffect(() => {
@@ -51,24 +53,28 @@ export default function UploadFn() {
 
     }, [containerRef]);
 
-    return (  
+    return (
         <>
-            <div>
+            <div className={searchResult}>
                 <Input
                     value={value}
                     options={options}
-                    style={{ width: 500 }}
                     onChange={getPanelValue}
                     placeholder="请输入关键词"
+                    className={antInput}
                 />
-                <Button type="primary" onClick={handleSearch}>搜索</Button>
+                <Button className={btn} type="primary" onClick={handleSearch}>搜索</Button>
+                {
+                    options.length ? <div className={classes.resultList}>
+                        {
+                            options.map(item => (
+                                <div className={classes.resultListItem} key={item.value}>{item.label}</div>
+                            ))
+                        }
+                    </div> : null
+                }
             </div>
             <div className='container' ref={containerRef} style={{ width: 700, height: 370 }}></div>
-            {
-                options.map(item => (
-                    <div>{ item.label }</div>
-                ))
-            }
         </>
     )
 }

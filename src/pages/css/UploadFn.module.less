@@ -1,0 +1,31 @@
+.search-result{
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    width: 700px;
+    position: relative;
+    .ant-input{
+        flex: 1;
+    }
+    .btn{
+        margin-left: 10px;
+    }
+    .result-list{
+        position: absolute;
+        top: 32px;
+        left: 0;
+        border: 1px solid #ddd;
+        border-top: none;
+        border-radius: 3px;
+        max-height: 200px;
+        overflow-y: auto;
+        width: calc(100% - 94px);
+        z-index: 10;
+        background-color: #fff;
+        padding: 6px 10px;
+        .resultListItem{
+            margin: 10px 0;
+            cursor: pointer;
+        }
+    }
+}
