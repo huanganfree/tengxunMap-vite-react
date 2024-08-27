@@ -8,10 +8,11 @@ export default function UploadFn() {
     const containerRef = useRef(null)
     const [options, setOptions] = useState([])
     const [value, setValue] = useState(undefined)
+    const [location, setLocation] = useState({ lat: 32.055687, lng: 118.789227 })
 
     function initMap() {
         //定义地图中心点坐标
-        var center = new qq.maps.LatLng(39.984120, 116.307484)
+        var center = new qq.maps.LatLng(location.lat, location.lng)
         var map = new qq.maps.Map(containerRef.current, {
             center: center,
             zoom: 8,
@@ -32,8 +33,9 @@ export default function UploadFn() {
             const { data, status } = res
             if (status === 0) {
                 const result = data.map(item => ({
+                    ...item,
                     value: item.id,
-                    label: item.title
+                    label: `${item.province}${item.city}${item.district}${item.title}`,
                 }))
                 console.log(result);
                 setOptions(result)
@@ -41,9 +43,13 @@ export default function UploadFn() {
         })
     }
 
-    async function getPanelValue(e) {
+    function getPanelValue(e) {
         setValue(e.target.value)
         setOptions([])
+    }
+
+    function handleActiveAddress({location}) {
+        setLocation(location)
     }
 
     useEffect(() => {
@@ -51,7 +57,7 @@ export default function UploadFn() {
             initMap()
         }
 
-    }, [containerRef]);
+    }, [containerRef, location]);
 
     return (
         <>
@@ -68,7 +74,7 @@ export default function UploadFn() {
                     options.length ? <div className={classes.resultList}>
                         {
                             options.map(item => (
-                                <div className={classes.resultListItem} key={item.value}>{item.label}</div>
+                                <div className={classes.resultListItem} key={item.value} onClick={() => handleActiveAddress(item)}>{item.label}</div>
                             ))
                         }
                     </div> : null
